@@ -1,18 +1,23 @@
 import React from "react";
-import useFetch from "./useFetch";
-export default function DataLoader() {
-    const data = useFetch("https://api.datos.gob.mx/v1/precio.gasolina.publico");
+// import useFetch from "./useFetch";
+import useAxios from './useAxios';
+export default function App() {
+    const data = useAxios("https://api.datos.gob.mx/v1/precio.gasolina.publico");
     const dataArray = [];
 
-    console.log(typeof(data.results))
-    console.log(data.results)
+    console.log(typeof(data.data))
+    console.log(data.data)
+    for (let x in data.data) {
+        console.log(data.data[x])
+        for (let y in data.data[x]) {
+            // console.log(data.data[x][y])
+            dataArray.push(data.data[x][y])
+        }
 
-    for (let x in data.results) {
-        // console.log(x)
-        console.log(data.results[x])
-        console.log(Object.values(data.results[x]))
-        dataArray.push(Object.values(data.results[x]))
     }
+
+    dataArray.splice(0, 3)
+
 
     console.log(dataArray)
 
@@ -21,7 +26,7 @@ export default function DataLoader() {
         <
         ul > {
             dataArray.map(el => ( <
-                li key = { el[0] } > { `${el[4]} - ${el[11]} - ${el[12]}` } < /li>
+                li key = { el._id } > { `${el.regular} - ${el.premium} - ${el.razonsocial}` } < /li>
             ))
         } <
         /ul> < /
