@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import useFetch from "./useFetch";
+export default function DataLoader() {
+    const data = useFetch("https://api.datos.gob.mx/v1/precio.gasolina.publico");
+    const dataArray = [];
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    console.log(typeof(data.results))
+    console.log(data.results)
+
+    for (let x in data.results) {
+        // console.log(x)
+        console.log(data.results[x])
+        console.log(Object.values(data.results[x]))
+        dataArray.push(Object.values(data.results[x]))
+    }
+
+    console.log(dataArray)
+
+    return ( <
+        div >
+        <
+        ul > {
+            dataArray.map(el => ( <
+                li key = { el[0] } > { `${el[4]} - ${el[11]} - ${el[12]}` } < /li>
+            ))
+        } <
+        /ul> < /
+        div >
+    );
 }
-
-export default App;
