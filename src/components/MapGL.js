@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import MapGL, { GeolocateControl, Marker, Popup } from 'react-map-gl'
+import React, { useState } from 'react';
+import MapGL, { GeolocateControl, Marker } from 'react-map-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import CityPin from './city-pin';
@@ -18,12 +18,15 @@ const Map = (props) => {
 
     props = Object.values(props).flat()
 
+    // console.log(JSON.parse(localStorage.getItem('informacion')))
+
+
     const [viewport, setViewPort] = useState({
         width: window.innerWidth,
         height: window.innerHeight,
-        latitude: 0,
-        longitude: 0,
-        zoom: 2
+        latitude: 23,
+        longitude: -101,
+        zoom: 4.3
     })
 
     const _onViewportChange = viewport => setViewPort({...viewport })
@@ -34,26 +37,31 @@ const Map = (props) => {
         data.push(props[x])
     }
 
-    console.log(data)
+    // console.log(data)
 
-    const _renderCityMarker = (city, index) => {
-        console.log(city)
+    const _renderCityMarker = ((city, index) => {
+        // console.log(city)
         return ( <
             Marker key = { `marker-${city._id}` }
-            longitude = { parseInt(city.longitude) }
-            latitude = { parseInt(city.latitude) } >
+            longitude = { parseFloat(city.longitude) }
+            latitude = { parseFloat(city.latitude) } >
             <
             CityPin size = { 20 }
             />  < /
             Marker >
         );
-    };
+    });
 
-    data.map(x => console.log(x.longitude))
+
+    const result = data.filter(d => d.latitude !== '0' ? d : null)
+
+    // console.log(result)
+
+    // data.map(x => console.log(x.longitude))
     return ( <
         MapGL {...viewport }
         mapboxApiAccessToken = { TOKEN }
-        mapStyle = "mapbox://styles/mapbox/light-v9"
+        mapStyle = "mapbox://styles/velryba/ck0iehp6b0ene1dr1imlg39us"
         onViewportChange = { _onViewportChange } >
         <
         GeolocateControl style = { geolocateStyle }
@@ -61,7 +69,7 @@ const Map = (props) => {
             { enableHighAccuracy: true }
         }
         trackUserLocation = { true }
-        /> {data.map(_renderCityMarker)}< /
+        /> {result.map(_renderCityMarker)} < /
         MapGL >
 
     )
